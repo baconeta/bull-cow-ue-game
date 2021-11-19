@@ -5,26 +5,41 @@ void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
 
-    InitGame();
+    SetupGame();
+    PrintLine(TEXT("The hidden word is: %s"), *HiddenWord);
 
     PrintLine(TEXT("Welcome to the Bull Cow Game!"));
     PrintLine(TEXT("If you don't know how to play, too bad.\nThere are no instructions yet."));
-    PrintLine(TEXT("Please guess the 5 letter word:")); // TODO change 5 to magic number 
+
+    PrintLine(TEXT("Please guess the %i letter word:"), HiddenWord.Len());
 }
 
 void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
 {
     ClearScreen();
+
     if (Input == HiddenWord) {
-        PrintLine(TEXT("Congratulations,\nyou guessed the hidden word - well done"));
+        PrintLine(TEXT("Congratulations,\nYou guessed the hidden word - well done"));
     }
     else {        
         PrintLine(Input);
-        PrintLine(TEXT("That word is incorrect. Sorry."));
+        if (Input.Len() != HiddenWord.Len()) {
+            PrintLine(TEXT("The hidden word is %i characters long, try again."), HiddenWord.Len()); // TODO change magic number
+        } else {
+            --LivesRemaining;
+            if (LivesRemaining > 0)
+            {
+                PrintLine(TEXT("That word is incorrect. Sorry."));
+                PrintLine(TEXT("You have %i lives remaining"), LivesRemaining);
+            } else {
+                PrintLine(TEXT("Game over."));
+                PrintLine(TEXT("The word was %s"), *HiddenWord);
+            }
+        }
     }
 
     // check if isogram
-    // check length of word
+    
     // remove a life
 
     // check lives > 0
@@ -33,7 +48,7 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
     // if no, show game over and hidden word
 }
 
-void UBullCowCartridge::InitGame() {
-    HiddenWord = TEXT("marsh"); // Set the hidden word
-    LivesRemaining = 5; // Set the lives
+void UBullCowCartridge::SetupGame() {
+    HiddenWord = TEXT("marsh");
+    LivesRemaining = HiddenWord.Len();
 }
