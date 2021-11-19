@@ -13,5 +13,10 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
 {
     FString HiddenWord = TEXT("marsh");
     ClearScreen();
-    PrintLine(Input);
+    if (Input == HiddenWord) {
+        PrintLine(TEXT("Congratulations,\nyou guessed the hidden word - well done"));
+    } else {        
+        PrintLine(Input);
+        PrintLine(TEXT("That word is incorrect. Sorry."));
+    }
 }
