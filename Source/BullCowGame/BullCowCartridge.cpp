@@ -18,7 +18,7 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     PrintLine(TEXT("The hidden word is: %s."), *HiddenWord); // debugging code only
 }
 
-void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
+void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player hits enter
 {
     if (bGameOver)
     {
@@ -27,7 +27,7 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
     }
     else 
     {   
-        ProcessGuess(Input);
+        ProcessGuess(PlayerInput);
     }
 }
 
@@ -48,7 +48,7 @@ void UBullCowCartridge::EndGame()
     PrintLine(TEXT("\nPress enter to restart."));
 }
 
-void UBullCowCartridge::ProcessGuess(FString Guess)
+void UBullCowCartridge::ProcessGuess(const FString& Guess)
 {
     if (Guess == HiddenWord)  
     {
@@ -83,7 +83,7 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
     PrintLine(TEXT("You have %i lives remaining"), LivesRemaining);
 }
 
-bool UBullCowCartridge::IsIsogram(FString Word) const
+bool UBullCowCartridge::IsIsogram(const FString& Word) const
 {
     // Check if any letters match another in the same word
     for (int32 Index = 0; Index < Word.Len(); Index++)
@@ -100,7 +100,7 @@ bool UBullCowCartridge::IsIsogram(FString Word) const
     return true;
 }
 
-TArray<FString> UBullCowCartridge::SetupValidWordsList(TArray<FString> ListOfWords) const 
+TArray<FString> UBullCowCartridge::SetupValidWordsList(const TArray<FString>& ListOfWords) const 
 {
     TArray<FString> ValidWords;
     for (FString Word : ListOfWords) {
