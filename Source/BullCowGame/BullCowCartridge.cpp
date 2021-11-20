@@ -11,7 +11,11 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     
     SetupGame();
 
-    PrintLine(TEXT("The hidden word is: %s"), *HiddenWord); // debugging code only
+    TArray<FString> ValidWords = SetupValidWordsList(Words);
+
+    PrintLine(TEXT("The number of possible words is %i."), ValidWords.Num());
+
+    PrintLine(TEXT("The hidden word is: %s."), *HiddenWord); // debugging code only
 }
 
 void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
@@ -27,7 +31,8 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
     }
 }
 
-void UBullCowCartridge::SetupGame() {
+void UBullCowCartridge::SetupGame()
+{
     bGameOver = false;
     HiddenWord = TEXT("marsh");
     LivesRemaining = HiddenWord.Len();
@@ -37,12 +42,14 @@ void UBullCowCartridge::SetupGame() {
     PrintLine(TEXT("Please guess the %i letter word:"), HiddenWord.Len());
 }
 
-void UBullCowCartridge::EndGame() {
+void UBullCowCartridge::EndGame()
+{
     bGameOver = true;
     PrintLine(TEXT("\nPress enter to restart."));
 }
 
-void UBullCowCartridge::ProcessGuess(FString Guess) {
+void UBullCowCartridge::ProcessGuess(FString Guess)
+{
     if (Guess == HiddenWord)  
     {
         PrintLine(TEXT("Congratulations,\nYou guessed the hidden word - well done"));
@@ -91,4 +98,19 @@ bool UBullCowCartridge::IsIsogram(FString Word) const
     }
     // If no letters match, the word is an isogram
     return true;
+}
+
+TArray<FString> UBullCowCartridge::SetupValidWordsList(TArray<FString> ListOfWords) const 
+{
+    TArray<FString> ValidWords;
+    for (int32 Index = 0; Index < ListOfWords.Num(); Index++) {
+            if (ListOfWords[Index].Len() >= 4 && ListOfWords[Index].Len() <= 8) 
+            {
+                if (IsIsogram(ListOfWords[Index]))
+                {
+                    ValidWords.Emplace(Words[Index]);
+                }
+            }
+        }
+    return ValidWords;
 }
