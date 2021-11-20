@@ -34,7 +34,7 @@ void UBullCowCartridge::SetupGame() {
 
 void UBullCowCartridge::EndGame() {
     bGameOver = true;
-    PrintLine(TEXT("Press enter to restart."));
+    PrintLine(TEXT("\nPress enter to restart."));
 }
 
 void UBullCowCartridge::ProcessGuess(FString Guess) {
@@ -51,22 +51,39 @@ void UBullCowCartridge::ProcessGuess(FString Guess) {
         return;
     }
 
-    // if (!GuessIsogram) {
-    //     PrintLine(TEXT("That guess is not an isogram!"));
-    //     PrintLine(TEXT("An isogram only contains one of each letter."));
-    //     return;
-    // }
+    if (!IsIsogram(Guess)) {
+        PrintLine(TEXT("That guess is not an isogram!"));
+        PrintLine(TEXT("Isograms contain just one of each letter."));
+        return;
+    }
 
     PrintLine(TEXT("That word is incorrect. Sorry."));
     --LivesRemaining;
     
-    if (LivesRemaining > 0)
-    {
-        PrintLine(TEXT("You have %i lives remaining"), LivesRemaining);
-    }
-    else
+    if (LivesRemaining <= 0)
     {
         PrintLine(TEXT("You lose! The word was %s."), *HiddenWord);
         EndGame();
-    } 
+    }
+
+    //Show the player the bulls and cows
+
+    PrintLine(TEXT("You have %i lives remaining"), LivesRemaining);
+}
+
+bool UBullCowCartridge::IsIsogram(FString Word) const
+{
+    // check if any letters match another in the same word
+    for (int32 i = 0; i < Word.Len(); ++i)
+    {
+        for (int32 j=i+1; j<Word.Len(); ++j)
+        {
+            if (Word[i] == Word[j])     
+            {
+                return false;
+            }
+        }
+    }
+    // if no letters match, the word is an isogram
+    return true;
 }
