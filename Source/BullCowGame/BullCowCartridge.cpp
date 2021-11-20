@@ -74,11 +74,11 @@ void UBullCowCartridge::ProcessGuess(FString Guess) {
 bool UBullCowCartridge::IsIsogram(FString Word) const
 {
     // check if any letters match another in the same word
-    for (int32 i = 0; i < Word.Len(); ++i)
+    for (int32 Index = 0; Index < Word.Len(); Index++)
     {
-        for (int32 j=i+1; j<Word.Len(); ++j)
+        for (int32 Comparison = Index + 1; Comparison < Word.Len(); Comparison++)
         {
-            if (Word[i] == Word[j])     
+            if (Word[Index] == Word[Comparison])     
             {
                 return false;
             }
