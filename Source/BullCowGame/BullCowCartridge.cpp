@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "BullCowCartridge.h"
+#include "HiddenWordList.h"
 
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
@@ -66,14 +67,14 @@ void UBullCowCartridge::ProcessGuess(FString Guess) {
         EndGame();
     }
 
-    //Show the player the bulls and cows
+    // show the player the bulls and cows
 
     PrintLine(TEXT("You have %i lives remaining"), LivesRemaining);
 }
 
 bool UBullCowCartridge::IsIsogram(FString Word) const
 {
-    // check if any letters match another in the same word
+    // Check if any letters match another in the same word
     for (int32 Index = 0; Index < Word.Len(); Index++)
     {
         for (int32 Comparison = Index + 1; Comparison < Word.Len(); Comparison++)
@@ -84,6 +85,6 @@ bool UBullCowCartridge::IsIsogram(FString Word) const
             }
         }
     }
-    // if no letters match, the word is an isogram
+    // If no letters match, the word is an isogram
     return true;
 }
