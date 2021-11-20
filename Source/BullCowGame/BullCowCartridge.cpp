@@ -17,41 +17,9 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
         SetupGame();
     }
     else 
-    {
-        if (Input == HiddenWord) 
-        {
-        PrintLine(TEXT("Congratulations,\nYou guessed the hidden word - well done"));
-        }
-        else
-        {        
-            PrintLine(Input);
-            if (Input.Len() != HiddenWord.Len()) {
-                PrintLine(TEXT("The hidden word is %i characters long,\nTry again."), HiddenWord.Len()); // TODO change magic number
-            }
-            else
-            {
-                --LivesRemaining;
-                if (LivesRemaining > 0)
-                {
-                    PrintLine(TEXT("That word is incorrect. Sorry."));
-                    PrintLine(TEXT("You have %i lives remaining"), LivesRemaining);
-                }
-                else
-                {
-                    EndGame();
-                }
-            }
-        }
+    {   
+        ProcessGuess(Input);
     }
-
-    // check if isogram
-    
-    // remove a life
-
-    // check lives > 0
-    // if yes, guess again
-    // show lives remaining
-    // if no, show game over and hidden word
 }
 
 void UBullCowCartridge::SetupGame() {
@@ -66,6 +34,39 @@ void UBullCowCartridge::SetupGame() {
 
 void UBullCowCartridge::EndGame() {
     bGameOver = true;
-    PrintLine(TEXT("You lose! The word was %s."), *HiddenWord);
     PrintLine(TEXT("Press enter to restart."));
+}
+
+void UBullCowCartridge::ProcessGuess(FString Guess) {
+    if (Guess == HiddenWord)  
+    {
+        PrintLine(TEXT("Congratulations,\nYou guessed the hidden word - well done"));
+        EndGame();
+        return;
+    }
+          
+    if (Guess.Len() != HiddenWord.Len()) 
+    {
+        PrintLine(TEXT("The hidden word is %i characters long,\nTry again."), HiddenWord.Len());
+        return;
+    }
+
+    // if (!GuessIsogram) {
+    //     PrintLine(TEXT("That guess is not an isogram!"));
+    //     PrintLine(TEXT("An isogram only contains one of each letter."));
+    //     return;
+    // }
+
+    PrintLine(TEXT("That word is incorrect. Sorry."));
+    --LivesRemaining;
+    
+    if (LivesRemaining > 0)
+    {
+        PrintLine(TEXT("You have %i lives remaining"), LivesRemaining);
+    }
+    else
+    {
+        PrintLine(TEXT("You lose! The word was %s."), *HiddenWord);
+        EndGame();
+    } 
 }
