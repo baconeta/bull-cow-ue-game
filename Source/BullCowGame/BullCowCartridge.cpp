@@ -10,12 +10,6 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     FFileHelper::LoadFileToStringArray(Words, *WordListPath);
     
     SetupGame();
-
-    TArray<FString> ValidWords = SetupValidWordsList(Words);
-
-    PrintLine(TEXT("The number of possible words is %i."), ValidWords.Num());
-
-    PrintLine(TEXT("The hidden word is: %s."), *HiddenWord); // debugging code only
 }
 
 void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player hits enter
@@ -34,8 +28,11 @@ void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player h
 void UBullCowCartridge::SetupGame()
 {
     bGameOver = false;
-    HiddenWord = TEXT("marsh");
+    HiddenWord = SetupValidWordsList(Words)[FMath::RandRange(0, SetupValidWordsList(Words).Num() - 1)];
     LivesRemaining = HiddenWord.Len();
+
+    // debugging code only
+    PrintLine(TEXT("The hidden word is: %s."), *HiddenWord);
     
     PrintLine(TEXT("Welcome to the Bull Cow Game!"));
     PrintLine(TEXT("If you don't know how to play, too bad.\nThere are no instructions yet."));
